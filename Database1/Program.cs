@@ -27,30 +27,55 @@ namespace Database1
 		private static void ImportJson()
 		{
 			Console.WriteLine(Inventory.ComputerName);
+			int Count = 0;
 
-			using (var db = new ITAMDbContext())
+			using (ITAMDbContext db = new ITAMDbContext())
 			{
 				using (Win32_Product_SQL product_SQL = new Win32_Product_SQL())
 				{
-					foreach (var item in Inventory.win32_Product.Items)
+					foreach (var productItem in Inventory.win32_Product.Items)
 					{
+						// Clear product_SQL, based on Inventory.win32_Product.Items
+						foreach (var property in productItem.GetType().GetProperties())
+						{
+							property.SetValue(product_SQL, null);
+						}
 						product_SQL.ComputerName = Inventory.ComputerName;
-						product_SQL.Name = item.Name.Replace("<null>", "");
-						product_SQL.Vendor = item.Vendor.Replace("<null>", "");
-						product_SQL.Version = item.Version.Replace("<null>", "");
-						product_SQL.IdentifyingNumber = item.IdentifyingNumber;
-						product_SQL.InstallDate = item.InstallDate.Replace("<null>", "");
-						product_SQL.InstallLocation = item.InstallLocation.Replace("<null>", "");
-						product_SQL.InstallSource = item.InstallSource.Replace("<null>", "");
-						product_SQL.LocalPackage = item.LocalPackage.Replace("<null>", "");
-						product_SQL.PackageCache = item.PackageCache.Replace("<null>", "");
-						product_SQL.PackageCode = item.PackageCode.Replace("<null>", "");
-						product_SQL.PackageName = item.PackageName.Replace("<null>", "");
-						product_SQL.URLInfoAbout = item.URLInfoAbout.Replace("<null>", "");
-						product_SQL.URLUpdateInfo = item.URLUpdateInfo.Replace("<null>", "");
 
-						db.Product.Add(product_SQL);
-						db.SaveChanges();
+						// Transfer data if not <null>
+						foreach (var property in productItem.GetType().GetProperties())
+						{
+							string value = (string)property.GetValue(productItem);
+							if (value != "<null>")
+							{
+								property.SetValue(product_SQL, value);
+							}
+						}
+
+						try
+						{
+							db.Product.Add(product_SQL);
+							db.SaveChanges();
+						}
+						catch
+						{
+							//Console.WriteLine($"==== {product_SQL.ComputerName}");
+							//Console.WriteLine($"Name         = {productItem.Name}: {productItem.Name.Length}");
+							//Console.WriteLine($"Vendor       = {productItem.Vendor}: {productItem.Vendor.Length}");
+							//Console.WriteLine($"Version      = {productItem.Version}: {productItem.Version.Length}");
+							//Console.WriteLine($"IdentifyNr   = {productItem.IdentifyingNumber}: {productItem.IdentifyingNumber.Length}");
+							//Console.WriteLine($"InstalDate   = {productItem.InstallDate}: {productItem.InstallDate.Length}");
+							//Console.WriteLine($"InstalLocati = {productItem.InstallLocation}: {productItem.InstallLocation.Length}");
+							//Console.WriteLine($"InstallSoure = {productItem.InstallSource}: {productItem.InstallSource.Length}");
+							//Console.WriteLine($"LocalPackage = {productItem.LocalPackage}: {productItem.LocalPackage.Length}");
+							//Console.WriteLine($"PackageCache = {productItem.PackageCache}: {productItem.PackageCache.Length}");
+							//Console.WriteLine($"PackageCode  = {productItem.PackageCode}: {productItem.PackageCode.Length}");
+							//Console.WriteLine($"PackageName  = {productItem.PackageName}: {productItem.PackageName.Length}");
+							//Console.WriteLine($"HelpLink     = {productItem.HelpLink}: {productItem.HelpLink.Length}");
+							//Console.WriteLine($"URLInfoAbout = {productItem.URLInfoAbout}: {productItem.URLInfoAbout.Length}");
+							//Console.WriteLine($"URLUpdateInf = {productItem.URLUpdateInfo}: {productItem.URLUpdateInfo.Length}");
+						}
+						Count++;
 					}
 
 				}
