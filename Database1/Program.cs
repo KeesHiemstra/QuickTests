@@ -12,6 +12,7 @@ namespace Database1
 	class Program
 	{
 		public static string JsonPath;
+		public static string DbConnection;
 		public static ITAMInventory Inventory;
 		public static List<Win32_Product_SQL> Product = new List<Win32_Product_SQL>();
 
@@ -27,9 +28,8 @@ namespace Database1
 		private static void ImportJson()
 		{
 			Console.WriteLine(Inventory.ComputerName);
-			int Count = 0;
 
-			using (ITAMDbContext db = new ITAMDbContext())
+			using (ITAMDbContext db = new ITAMDbContext(DbConnection))
 			{
 				using (Win32_Product_SQL product_SQL = new Win32_Product_SQL())
 				{
@@ -75,7 +75,6 @@ namespace Database1
 							//Console.WriteLine($"URLInfoAbout = {productItem.URLInfoAbout}: {productItem.URLInfoAbout.Length}");
 							//Console.WriteLine($"URLUpdateInf = {productItem.URLUpdateInfo}: {productItem.URLUpdateInfo.Length}");
 						}
-						Count++;
 					}
 
 				}
@@ -104,10 +103,12 @@ namespace Database1
 			if (File.Exists("\\\\NASServer\\Data\\Kees\\Inventory.exe"))
 			{
 				JsonPath = "\\\\NASServer\\Data\\Kees\\Inventory";
+				DbConnection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ITAM;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 			}
 			else if (Directory.Exists("C:\\Users\\Kees\\OneDrive\\Etc\\ITAM\\Inventory"))
 			{
 				JsonPath = "C:\\Users\\Kees\\OneDrive\\Etc\\ITAM\\Inventory";
+				DbConnection = @"Trusted_Connection=True;Data Source=(Local);Database=ITAM;MultipleActiveResultSets=true";
 			}
 			else if (Directory.Exists("C:\\Etc\\ITAM\\Inventory"))
 			{
