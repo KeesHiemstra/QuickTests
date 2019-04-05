@@ -68,26 +68,10 @@ namespace Database1
 								message += $"{item.Name.PadRight(17)} = {value.Length.ToString().PadLeft(3)}: {value}\n";
 							}
 							MessageBox.Show(message, $"Error {Inventory.ComputerName}: 0x{ex.HResult:X}", MessageBoxButton.OK, MessageBoxImage.Error);
-							//Console.WriteLine($"==== {product_SQL.ComputerName}");
-							//Console.WriteLine($"Name         = {productItem.Name}: {productItem.Name.Length}");
-							//Console.WriteLine($"Vendor       = {productItem.Vendor}: {productItem.Vendor.Length}");
-							//Console.WriteLine($"Version      = {productItem.Version}: {productItem.Version.Length}");
-							//Console.WriteLine($"IdentifyNr   = {productItem.IdentifyingNumber}: {productItem.IdentifyingNumber.Length}");
-							//Console.WriteLine($"InstalDate   = {productItem.InstallDate}: {productItem.InstallDate.Length}");
-							//Console.WriteLine($"InstalLocati = {productItem.InstallLocation}: {productItem.InstallLocation.Length}");
-							//Console.WriteLine($"InstallSoure = {productItem.InstallSource}: {productItem.InstallSource.Length}");
-							//Console.WriteLine($"LocalPackage = {productItem.LocalPackage}: {productItem.LocalPackage.Length}");
-							//Console.WriteLine($"PackageCache = {productItem.PackageCache}: {productItem.PackageCache.Length}");
-							//Console.WriteLine($"PackageCode  = {productItem.PackageCode}: {productItem.PackageCode.Length}");
-							//Console.WriteLine($"PackageName  = {productItem.PackageName}: {productItem.PackageName.Length}");
-							//Console.WriteLine($"HelpLink     = {productItem.HelpLink}: {productItem.HelpLink.Length}");
-							//Console.WriteLine($"URLInfoAbout = {productItem.URLInfoAbout}: {productItem.URLInfoAbout.Length}");
-							//Console.WriteLine($"URLUpdateInf = {productItem.URLUpdateInfo}: {productItem.URLUpdateInfo.Length}");
-						}
-					}
-
-				}
-			}
+						}//try - catch
+					}//for all items
+				}//using product_SQL
+			}//using ITAMDbContext
 		}
 
 		private static void GetJsonFiles()

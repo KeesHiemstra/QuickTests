@@ -6,7 +6,7 @@ CREATE TABLE dbo.Win32_Product(
 	[ComputerName] [varchar](15) NOT NULL,
 	[Name] [varchar](128) NULL,
 	[Vendor] [varchar](48) NULL,
-	[Version] [varchar](16) NULL,
+	[Version] [varchar](24) NULL,
 	[IdentifyingNumber] [varchar](38) NOT NULL,
 	[InstallDate] [varchar](8) NULL,
 	[InstallLocation] [varchar](96) NULL,
