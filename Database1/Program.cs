@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Database1
 {
@@ -13,6 +14,7 @@ namespace Database1
 	{
 		public static string JsonPath;
 		public static string DbConnection;
+
 		public static ITAMInventory Inventory;
 		public static List<Win32_Product_SQL> Product = new List<Win32_Product_SQL>();
 
@@ -57,8 +59,15 @@ namespace Database1
 							db.Product.Add(product_SQL);
 							db.SaveChanges();
 						}
-						catch
+						catch (Exception ex)
 						{
+							string message = $"{ex.Source}\n{ex.Message}\n\n";
+							foreach (var item in productItem.GetType().GetProperties())
+							{
+								string value = (string)item.GetValue(productItem);
+								message += $"{item.Name.PadRight(17)} = {value.Length.ToString().PadLeft(3)}: {value}\n";
+							}
+							MessageBox.Show(message, $"Error {Inventory.ComputerName}: 0x{ex.HResult:X}", MessageBoxButton.OK, MessageBoxImage.Error);
 							//Console.WriteLine($"==== {product_SQL.ComputerName}");
 							//Console.WriteLine($"Name         = {productItem.Name}: {productItem.Name.Length}");
 							//Console.WriteLine($"Vendor       = {productItem.Vendor}: {productItem.Vendor.Length}");
